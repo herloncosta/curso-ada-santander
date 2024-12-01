@@ -27,7 +27,7 @@ fs.readFile(filePath, { encoding: 'utf-8' }, async (error, data) => {
                 return
             }
             console.log(`${filename} created`)
-        }),
-            prompt.close()
+        })
+        prompt.close()
     })
 })

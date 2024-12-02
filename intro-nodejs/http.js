@@ -1,8 +1,10 @@
 const http = require('node:http')
 
-const server = http.createServer((request, response) => {
-    const { headers, method, url, statusCode } = request
-    const sports = ['soccer', 'basketball', 'baseball', 'tennis']
+const sports = ['soccer', 'basketball', 'baseball', 'tennis']
+
+const server = http.createServer(async (request, response) => {
+    const { method, url } = request
+    response.setHeader('Content-Type', 'application/json')
 
     if (url === '/api') {
         const htmlResponse = `
@@ -16,14 +18,41 @@ const server = http.createServer((request, response) => {
         return
     }
 
-    if (url === '/api/sports') {
+    if (method === 'GET' && url === '/api/sports') {
         response.write(JSON.stringify(sports))
         response.end()
         return
     }
 
-    response.statusCode = 404
-    response.end()
+    if (method === 'POST' && url === '/api/sports') {
+        const bodyPromise = new Promise((resolve, reject) => {
+            let body = ''
+            request.on('data', chunk => {
+                body += chunk
+            })
+            request.on('end', () => {
+                try {
+                    body = JSON.parse(body)
+                    resolve(body)
+                } catch (error) {
+                    reject(`Invalid JSON: ${error}`)
+                }
+            })
+            request.on('error', error => {
+                reject(error)
+            })
+        })
+
+        const { name } = await bodyPromise
+        if (!name) {
+            response.statusCode = 400
+            response.end()
+            return
+        }
+        sports.push(name)
+        response.statusCode = 201
+        response.end()
+    }
 })
 
 server.listen(3000, () => {

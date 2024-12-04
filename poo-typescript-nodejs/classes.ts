@@ -1,9 +1,11 @@
+import type { IEstabelecimento } from './interface'
+
 type Produto = {
     nome: string
     preco: number
 }
 
-class Estabelecimento {
+class Estabelecimento implements IEstabelecimento {
     private filaDeEspera = 10
 
     constructor(

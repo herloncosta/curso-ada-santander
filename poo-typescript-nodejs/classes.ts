@@ -4,9 +4,19 @@ type Produto = {
 }
 
 class Estabelecimento {
-    private filaDeEspera: number = 10
+    private filaDeEspera = 10
 
-    constructor(private endereco: string, private setor: string, private produtos: Produto[]) {}
+    constructor(
+        private endereco: string,
+        private setor: string,
+        private produtos: Produto[],
+        filaDeEspera?: number,
+    ) {
+        this.endereco = endereco
+        this.setor = setor
+        this.produtos = produtos
+        this.filaDeEspera = filaDeEspera ?? 0
+    }
     listarNomesProdutos(): string[] {
         return this.produtos.map(produto => produto.nome)
     }
@@ -16,11 +26,23 @@ class Estabelecimento {
     }
 
     diminuirFila(): void {
+        if (this.filaDeEspera === 0) {
+            console.log('A fila já está vazia.')
+            return
+        }
         this.filaDeEspera--
     }
 
-    getTamanhoFila(): number {
+    get tamanhoFila(): number {
         return this.filaDeEspera
+    }
+
+    set tamanhoFila(tamanho: number) {
+        if (tamanho < 0) {
+            console.log('O tamanho da fila não pode ser negativo.')
+            return
+        }
+        this.filaDeEspera = tamanho
     }
 }
 
@@ -34,8 +56,11 @@ const padaria = new Estabelecimento('Rua 1', 'Alimentício', [
 
 console.log(padaria)
 console.log(padaria.listarNomesProdutos())
-console.log(padaria.getTamanhoFila())
+console.log(padaria.tamanhoFila)
 padaria.aumentarFila()
-console.log(padaria.getTamanhoFila())
+console.log(padaria.tamanhoFila)
 padaria.diminuirFila()
-console.log(padaria.getTamanhoFila())
+console.log(padaria.tamanhoFila)
+
+padaria.tamanhoFila = 5
+console.log(padaria.tamanhoFila)

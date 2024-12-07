@@ -1,0 +1,26 @@
+### GET /users
+GET http://localhost:3000/users
+
+### POST /users
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "name": "Herlon",
+    "email": "herlon@email.com"
+}
+
+### GET /users/1
+GET http://localhost:3000/users/1
+
+### PUT /users/1
+PUT http://localhost:3000/users/1
+Content-Type: application/json
+
+{
+    "name": "Herlon",
+    "email": "herlon@email.com"
+}
+
+### DELETE /users/1
+DELETE http://localhost:3000/users/1
